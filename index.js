@@ -1,3 +1,4 @@
+const http = require('http');
 const express = require('express');
 const app = express();
 
@@ -10,7 +11,10 @@ const PORT  = 3000;
 //Use the routers
 app.all('/', indexRouter);
 
+//Get the server for the websocket
+const server = http.createServer(app);
+
 //Listen
-app.listen(PORT, () => {
-    console.log(`Listening on port: ${PORT}`);
+server.listen(PORT, () => {
+    console.log((new Date()) + ' Listening on port: ' + PORT.toString());
 });
