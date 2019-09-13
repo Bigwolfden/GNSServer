@@ -6,7 +6,7 @@
 First clone the repository (with either ssh or https, the command uses ssh) and install the dependencies
 ```
 git clone git@github.com:Bigwolfden/techprepserver.git
-cd TechPrep2020
+cd techprepserver
 yarn
 ```
 Then, you can start the websocket server
