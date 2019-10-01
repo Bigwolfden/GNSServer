@@ -7,7 +7,7 @@ const app = express();
 const indexRouter = require('./../routes/');
 
 //Use the routers
-app.all('/', indexRouter);
+app.use('/', indexRouter);
 
 //Get the server for the websocket
 module.exports = http.createServer(app);
