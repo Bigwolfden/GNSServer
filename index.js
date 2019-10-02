@@ -1,3 +1,4 @@
+require('dotenv').config();
 const WebSocketServer = require('websocket').server;
 const httpServer = require('./server');
 
