@@ -1,6 +1,7 @@
 import {server as WebSocketServer} from "websocket";
 import { httpServer } from "./server/index";
 import { connection as pool} from "./server/database";
+import { WSMessage } from "./Messages.types";
 
 
 //Configure the port number

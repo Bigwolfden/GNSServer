@@ -1,4 +1,5 @@
 import { client as WebSocketClient } from "websocket";
+import { WSMessage, EventType } from "../Messages.types";
 
 // Create a new websocket client
 const client = new WebSocketClient();
@@ -27,10 +28,14 @@ client.on('connect', connection => {
 
     const sendTest = () => {
         //Create some test data
-        const testData = {
-            name: 'Ryan',
-            age: 17,
-            birthday: new Date('9/16/2001')
+        const testData: WSMessage = {
+            event: EventType.CLIENTS,
+            status: 'ok',
+            data: {
+                name: 'Ryan',
+                age: 16,
+                birthday: new Date('9/16/01')
+            }
         };
     
         //Send the data

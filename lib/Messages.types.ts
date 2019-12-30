@@ -1,8 +1,8 @@
-interface WSMessage {
+export interface WSMessage {
     status: 'ok' | 'error',
     event: EventType,
     data: any,
 }
-enum EventType {
+export enum EventType {
     CLIENTS
 }
