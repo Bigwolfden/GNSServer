@@ -9,12 +9,12 @@ git clone git@github.com:Bigwolfden/techprepserver.git
 cd techprepserver
 yarn
 ```
-##Development
+## Development
 The server uses TypeScript and [ts-node](https://www.npmjs.com/package/ts-node) for development. Run the development server with
 ```
 yarn dev
 ```
-##Production
+## Production
 Transpile the TypeScript with
 ```
 yarn build
