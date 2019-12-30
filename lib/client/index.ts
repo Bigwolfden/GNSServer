@@ -1,4 +1,4 @@
-const WebSocketClient = require('websocket').client;
+import { client as WebSocketClient } from "websocket";
 
 // Create a new websocket client
 const client = new WebSocketClient();

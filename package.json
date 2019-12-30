@@ -2,17 +2,26 @@
   "name": "techprepapi",
   "version": "1.0.0",
   "description": "The REST API for our 2020 Tech Prep project",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "start": "node .",
+    "dev": "ts-node ./lib/index.ts",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ryan Wolf",
   "license": "MIT",
   "dependencies": {
-    "dotenv": "^8.1.0",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.2",
+    "@types/pg": "^7.14.0",
+    "@types/websocket": "^1.0.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "pg": "^7.12.1",
     "websocket": "^1.0.30"
+  },
+  "devDependencies": {
+    "typescript": "^3.7.4"
   }
 }

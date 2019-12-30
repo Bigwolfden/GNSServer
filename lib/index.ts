@@ -1,9 +1,10 @@
-require('dotenv').config();
-const WebSocketServer = require('websocket').server;
-const httpServer = require('./server');
+import {server as WebSocketServer} from "websocket";
+import { httpServer } from "./server/index";
+import { connection as pool} from "./server/database";
+
 
 //Configure the port number
-const PORT  = 3000;
+const PORT = 3000;
 
 //Listen with the server
 httpServer.listen(PORT, () => {
@@ -18,12 +19,12 @@ const wsServer = new WebSocketServer({
 });
 
 // Decide whether the origin of a request is allowed.
-const originIsGood = origin => {
+const originIsGood = (origin: string) => {
     return true;
 };
-const handleUTF8 = data => {
-    const json = JSON.parse(data);
-    console.log(`Recieved message: ${json.name} and ${json.age} and ${json.birthday}`);
+const handleUTF8 = (message: WSMessage) => {
+    const data = message.data;
+    console.log(`Recieved message: ${data.name} and ${data.age} and ${data.birthday}`);
 }
 wsServer.on('request', (req) => {
     if (!originIsGood(req.origin)) {
@@ -36,11 +37,16 @@ wsServer.on('request', (req) => {
     const connection = req.accept('echo-protocol', req.origin);
 
     // Handle any messages
-    connection.on('message', (message) => {
+    connection.on('message', async message => {
         switch (message.type) {
             case 'utf8':
-                handleUTF8(message.utf8Data);
-                connection.sendUTF('Hello Mr. Client!');
+                if (message.utf8Data) {
+                    const data: WSMessage = JSON.parse(message.utf8Data);
+                    handleUTF8(data);
+                }
+                ;
+                const clients = await pool.query('SELECT * FROM clients;');
+                connection.sendUTF(JSON.stringify(clients.rows));
                 break;
         }
     });
