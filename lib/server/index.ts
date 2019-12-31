@@ -1,4 +1,4 @@
-import * as http from "http";
+import http from "http";
 import express from "express";
 import { router as indexRouter} from "./routes/index";
 

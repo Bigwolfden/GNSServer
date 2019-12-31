@@ -1,4 +1,4 @@
-import {server as WebSocketServer} from "websocket";
+import WebSocket from "ws";
 import { httpServer } from "./server/index";
 import { connection as pool} from "./server/database";
 import { WSMessage, EventType } from "./Messages.types";
@@ -13,52 +13,44 @@ httpServer.listen(PORT, () => {
 });
 
 // Configure a websocket server
-const wsServer = new WebSocketServer({
+const wsServer = new WebSocket.Server({
     // Set the http server to the one configured in server/index.js
-    httpServer,
-    autoAcceptConnections: false
+    noServer: true
 });
 
-// Decide whether the origin of a request is allowed.
-const originIsGood = (origin: string) => {
-    return true;
-};
-const handleUTF8 = (message: WSMessage) => {
-    const data = message.data;
-    console.log(`Recieved message: ${data.name} and ${data.age} and ${data.birthday}`);
-}
-wsServer.on('request', (req) => {
-    if (!originIsGood(req.origin)) {
-        // Reject the reqest if it doesn't come from the proper origin
-        req.reject(403);
-        console.log(`Connection from origin ${req.origin} rejected.`);
-        return;
-    }
-    // Accept the connection from the request origin
-    const connection = req.accept('echo-protocol', req.origin);
-
-    // Handle any messages
-    connection.on('message', async message => {
-        switch (message.type) {
-            case 'utf8':
-                if (message.utf8Data) {
-                    const data: WSMessage = JSON.parse(message.utf8Data);
-                    handleUTF8(data);
-                }
-                ;
+wsServer.on('connection', (socket, request) => {
+    socket.on('message', async (rawMessage) => {
+        //Parse the message from json
+        const message: WSMessage = JSON.parse(rawMessage as string);
+        //Make sure it's the proper format and there's no errors
+        if (!message.status || message.status == 'error') {
+            console.log('Message error!');
+            return;
+        }
+        //Handle the message types
+        switch (message.event) {
+            case EventType.CLIENTS:
+                console.log('Sending clients...');
                 const {rows: clients} = await pool.query('SELECT * FROM clients;');
                 const response: WSMessage = {
                     status: 'ok',
                     event: EventType.CLIENTS,
                     data: clients
                 }
-                connection.sendUTF(JSON.stringify(response));
+                socket.send(JSON.stringify(response));
+                console.log('Clients sent.');
+                break;
+            default:
+                console.log('Unknown message event');
                 break;
         }
     });
-
-    // Handle the closing of a connection
-    connection.on('close', (code, description) => {
-        console.log(`The connection ${connection.remoteAddress} has been closed with the code: ${code} and description: ${description}`);
+    socket.on('close', (code, reason) => {
+        console.log(`The connection closed with code: ${code} and reason: ${reason}`);
+    })
+});
+httpServer.on('upgrade', (req, socket, head) => {
+    wsServer.handleUpgrade(req, socket, head, ws => {
+        wsServer.emit('connection', ws, req);
     });
 });

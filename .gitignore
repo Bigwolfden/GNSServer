@@ -2,3 +2,7 @@
 node_modules/
 #Environment variables
 .env
+#Package errors
+*.log
+#Build directory
+dist/

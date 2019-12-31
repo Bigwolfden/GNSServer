@@ -1,13 +1,9 @@
-import { client as WebSocketClient } from "websocket";
+import WebSocket from "ws";
 import { WSMessage, EventType, Client } from "../Messages.types";
 
 // Create a new websocket client
-const client = new WebSocketClient();
+const client = new WebSocket('ws://localhost:3000');
 
-// Handle when the connection fails
-client.on('connectFailed', error => {
-    console.error('Error connecting with the server: ' + error.message);
-});
 /*
     Helper functions
 */
@@ -17,60 +13,36 @@ function displayClients(clients: Client[]) {
     });
 }
 // Handle when the client connects
-client.on('connect', connection => {
+client.on('open', () => {
     console.log('The WebSocket Client has connected');
-    
-    // Handle connection errors
-    connection.on('error', error => {
-        console.log('Connection error: ' + error.message);
-    });
-
-    connection.on('close', (code, description) => {
-        console.log(`The connection has been closed with code: ${code} and description: ${description}`);
-    });
-
-    connection.on('message', message => {
-        //Ensure that the message data is in the proper format
-        if (message.type == 'utf8' && message.utf8Data) {
-            //Parse the data into json
-            const parsedMessage: WSMessage = JSON.parse(message.utf8Data);
-
-            //Ensure the message is ok
-            if (parsedMessage.status == 'error') throw new Error("Error with the message! " + parsedMessage.data);
-
-            //Handle each type of message
-            switch(parsedMessage.event) {
-                case EventType.CLIENTS:
-                    displayClients(parsedMessage.data as Client[]);
-                    break;
-                default:
-                    console.log("Unrecognized message!");
-                    break;
-            }
-        } else {
-            //There's something wrong with the connection
-            console.log("Error! Message data is incorrect format");
-        }
-    });
-
-    const sendTest = () => {
-        //Create some test data
-        const testData: WSMessage = {
-            event: EventType.CLIENTS,
-            status: 'ok',
-            data: {
-                name: 'Ryan',
-                age: 16,
-                birthday: new Date('9/16/01')
-            }
-        };
-    
-        //Send the data
-        connection.sendUTF(JSON.stringify(testData));
+    //Ask for the clients
+    const clientReq: WSMessage = {
+        status: 'ok',
+        event: EventType.CLIENTS,
+        data: "",
     }
-
-    sendTest();
+    client.send(JSON.stringify(clientReq));
 });
-
-// Connect to the server
-client.connect('ws://localhost:3000', 'echo-protocol');
+client.on('error', (error) => {
+    console.log('Connection error: ' + error.message);
+});
+client.on('close', (code, reason) => {
+    console.log(`The connection has been closed with code: ${code} and description: ${reason}`);
+});
+client.on('message', (rawMessage: string) => {
+    //Parse the message
+    const message: WSMessage = JSON.parse(rawMessage);
+    //Make sure it's the proper format and there's no errors
+    if (!message.status || message.status == 'error') {
+        console.log('Message error!');
+        return;
+    }
+    switch(message.event) {
+        case EventType.CLIENTS:
+            displayClients(message.data);
+            break;
+        default:
+            console.log('Unknown message event');
+            break;
+    }
+});
