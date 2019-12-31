@@ -1,7 +1,7 @@
 import {server as WebSocketServer} from "websocket";
 import { httpServer } from "./server/index";
 import { connection as pool} from "./server/database";
-import { WSMessage } from "./Messages.types";
+import { WSMessage, EventType } from "./Messages.types";
 
 
 //Configure the port number
@@ -46,8 +46,13 @@ wsServer.on('request', (req) => {
                     handleUTF8(data);
                 }
                 ;
-                const clients = await pool.query('SELECT * FROM clients;');
-                connection.sendUTF(JSON.stringify(clients.rows));
+                const {rows: clients} = await pool.query('SELECT * FROM clients;');
+                const response: WSMessage = {
+                    status: 'ok',
+                    event: EventType.CLIENTS,
+                    data: clients
+                }
+                connection.sendUTF(JSON.stringify(response));
                 break;
         }
     });

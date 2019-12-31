@@ -1,5 +1,5 @@
 import { client as WebSocketClient } from "websocket";
-import { WSMessage, EventType } from "../Messages.types";
+import { WSMessage, EventType, Client } from "../Messages.types";
 
 // Create a new websocket client
 const client = new WebSocketClient();
@@ -8,7 +8,14 @@ const client = new WebSocketClient();
 client.on('connectFailed', error => {
     console.error('Error connecting with the server: ' + error.message);
 });
-
+/*
+    Helper functions
+*/
+function displayClients(clients: Client[]) {
+    clients.forEach(value => {
+        console.log(`Got client named ${value.first_name}`);
+    });
+}
 // Handle when the client connects
 client.on('connect', connection => {
     console.log('The WebSocket Client has connected');
@@ -23,7 +30,27 @@ client.on('connect', connection => {
     });
 
     connection.on('message', message => {
-        console.log('Recieved message: ' + ((message.type==='utf8') ? message.utf8Data : message.binaryData));
+        //Ensure that the message data is in the proper format
+        if (message.type == 'utf8' && message.utf8Data) {
+            //Parse the data into json
+            const parsedMessage: WSMessage = JSON.parse(message.utf8Data);
+
+            //Ensure the message is ok
+            if (parsedMessage.status == 'error') throw new Error("Error with the message! " + parsedMessage.data);
+
+            //Handle each type of message
+            switch(parsedMessage.event) {
+                case EventType.CLIENTS:
+                    displayClients(parsedMessage.data as Client[]);
+                    break;
+                default:
+                    console.log("Unrecognized message!");
+                    break;
+            }
+        } else {
+            //There's something wrong with the connection
+            console.log("Error! Message data is incorrect format");
+        }
     });
 
     const sendTest = () => {
