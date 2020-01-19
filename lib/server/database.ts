@@ -1,7 +1,7 @@
 import {Pool} from "pg";
 import {config} from "dotenv";
 config();
-export const connection = new Pool({
+export const pool = new Pool({
     user: process.env.DB_USERNAME,
     host: process.env.DB_HOST,
     database: 'gns',

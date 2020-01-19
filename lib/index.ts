@@ -1,8 +1,9 @@
 import WebSocket from "ws";
 import { httpServer } from "./server/index";
-import { connection as pool} from "./server/database";
-import { WSMessage, EventType } from "./Messages.types";
-
+import { pool } from "./server/database";
+import { WSMessage, EventType, User } from "./Messages.types";
+import { authenticateWS } from "./server/authenticate";
+import { IncomingMessage } from "http";
 
 //Configure the port number
 const PORT = 3000;
@@ -17,8 +18,11 @@ const wsServer = new WebSocket.Server({
     // Set the http server to the one configured in server/index.js
     noServer: true
 });
+wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: User) => {
 
-wsServer.on('connection', (socket, request) => {
+    //Send them the clients
+    sendClients(socket, user);
+
     socket.on('message', async (rawMessage) => {
         //Parse the message from json
         const message: WSMessage = JSON.parse(rawMessage as string);
@@ -29,17 +33,6 @@ wsServer.on('connection', (socket, request) => {
         }
         //Handle the message types
         switch (message.event) {
-            case EventType.CLIENTS:
-                console.log('Sending clients...');
-                const {rows: clients} = await pool.query('SELECT * FROM clients;');
-                const response: WSMessage = {
-                    status: 'ok',
-                    event: EventType.CLIENTS,
-                    data: clients
-                }
-                socket.send(JSON.stringify(response));
-                console.log('Clients sent.');
-                break;
             default:
                 console.log('Unknown message event');
                 break;
@@ -49,8 +42,36 @@ wsServer.on('connection', (socket, request) => {
         console.log(`The connection closed with code: ${code} and reason: ${reason}`);
     })
 });
+//Handles a request trying to connect to the websocket
 httpServer.on('upgrade', (req, socket, head) => {
-    wsServer.handleUpgrade(req, socket, head, ws => {
-        wsServer.emit('connection', ws, req);
-    });
+    //Authenticate the request
+    authenticateWS(req, (err, user) => {
+
+        //If there's an error or the user is empty, don't let them establish a websocket connection
+        if (err || !user.name) {
+            socket.destroy();
+            return;
+        }
+
+        //If we're good, upgrade the connection
+        wsServer.handleUpgrade(req, socket, head, ws => {
+            wsServer.emit('connection', ws, req, user);
+        });
+    }) 
 });
+async function sendClients(ws: WebSocket, user:User) {
+    //Anounce that clients are being sent to a specificied user
+    console.log(`Sending clients to ${user.name}...`);
+    //Get the clients from the database
+    const {rows: clients} = await pool.query('SELECT * FROM clients;');
+    //Form a message to send with the clients as the data
+    const response: WSMessage = {
+        status: 'ok',
+        event: EventType.CLIENT_BASIC,
+        data: clients
+    }
+    //Send the data over the socket
+    ws.send(JSON.stringify(response));
+    //Announce that the clients have been sent
+    console.log(`Clients sent to ${user.name}.`);
+}

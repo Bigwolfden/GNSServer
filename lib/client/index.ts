@@ -2,7 +2,11 @@ import WebSocket from "ws";
 import { WSMessage, EventType, Client } from "../Messages.types";
 
 // Create a new websocket client
-const client = new WebSocket('ws://localhost:3000');
+const client = new WebSocket('ws://localhost:3000', {
+    headers: {
+        token: '124'
+    }
+});
 
 /*
     Helper functions
@@ -18,7 +22,7 @@ client.on('open', () => {
     //Ask for the clients
     const clientReq: WSMessage = {
         status: 'ok',
-        event: EventType.CLIENTS,
+        event: EventType.CLIENT_BASIC,
         data: "",
     }
     client.send(JSON.stringify(clientReq));
@@ -38,7 +42,7 @@ client.on('message', (rawMessage: string) => {
         return;
     }
     switch(message.event) {
-        case EventType.CLIENTS:
+        case EventType.CLIENT_BASIC:
             displayClients(message.data);
             break;
         default:
