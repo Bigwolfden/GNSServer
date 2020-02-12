@@ -5,11 +5,16 @@ import {config} from "dotenv";
 import { OAuth2Client } from "google-auth-library";
 import { pool } from "./database";
 config();
+//Create an Oauth client with the correct client id for the application
 const client = new OAuth2Client(process.env.CLIENT_ID);
+/**
+ * Authenticates incoming http requests before establishing a websocket connection
+ * @param request The http request that is trying to establish a websocket connection
+ * @param cb The callback function that gets passed with an error or the user
+ */
 export async function authenticateWS(request: IncomingMessage, cb: (err: string, user: User) => void) {
     //Create an empty user to use if the request gets rejected
     const emptyUser: User = {id: 0, name: '', title: ''};
-    
     //Make sure that they have sent a token
     if (typeof request.headers.token == 'string') {
         try {
@@ -35,7 +40,7 @@ export async function authenticateWS(request: IncomingMessage, cb: (err: string,
                 cb('', emptyUser);
             }
         } catch (e) {
-            console.log("Unable to validate the token from " + request.headers.host);
+            console.log("Unable to validate the token from " + request.headers.host + ". Error: " + e.message);
             cb('Invalid token', emptyUser);
         }
     } else {

@@ -22,7 +22,7 @@ client.on('open', () => {
     //Ask for the clients
     const clientReq: WSMessage = {
         status: 'ok',
-        event: EventType.CLIENT_BASIC,
+        event: EventType.CLIENT_STAGE1,
         data: "",
     }
     client.send(JSON.stringify(clientReq));
@@ -42,7 +42,7 @@ client.on('message', (rawMessage: string) => {
         return;
     }
     switch(message.event) {
-        case EventType.CLIENT_BASIC:
+        case EventType.CLIENT_STAGE1:
             displayClients(message.data);
             break;
         default:

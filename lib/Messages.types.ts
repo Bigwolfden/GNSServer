@@ -4,14 +4,15 @@ export interface WSMessage {
     data: any,
 }
 export enum EventType {
-    CLIENT_BASIC,
-    CLIENT_TEMPLATES,
-    CLIENT_INVOICE,
-    CLIENT_INSTALLATION,
+    CLIENT_STAGE1,
+    CLIENT_STAGE2,
+    CLIENT_ARCHIVE,
     UPDATE,
-    GET_COMMENTS,
     ADD_COMMENT,
-    TOGGLE_COMMENT
+    DELETE_COMMENT,
+    ONLINE_USERS,
+    ADD_CLIENT,
+    CLIENT_NEXTSTAGE
 }
 export interface Client {
     id: number,

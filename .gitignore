@@ -6,3 +6,6 @@ node_modules/
 *.log
 #Build directory
 dist/
+#HTTPS
+server.key
+server.crt
