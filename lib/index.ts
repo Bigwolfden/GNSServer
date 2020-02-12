@@ -26,7 +26,7 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
     //Add them to the list of online users
     onlineUsers.push(user);
     //Send them the clients
-    sendInitialClients(socket, user);
+    //sendInitialClients(socket, user);
 
     socket.on('message', async (rawMessage) => {
         //Parse the message from json
@@ -41,7 +41,7 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
             case EventType.CLIENT_STAGE1:
                 console.log(`Sending Stage 1 Clients to ${user.name}`);
                 //Get all the clients that are in stage one
-                const stage1 = getClients(1);
+                const stage1 = await getClients(1);
                 //Format the data into a message
                 const stage1Message: WSMessage = {
                     status: 'ok',
@@ -53,7 +53,7 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
             case EventType.CLIENT_STAGE2:
                 console.log(`Sending Stage 2 Clients to ${user.name}`);
                 //Get all the clients that are in stage two
-                const stage2 = getClients(2);
+                const stage2 = await getClients(2);
                 //Format the data into a message
                 const stage2Message: WSMessage = {
                     status: 'ok',
@@ -63,9 +63,9 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
                 socket.send(JSON.stringify(stage2Message));
                 break;
             case EventType.CLIENT_ARCHIVE:
-                console.log(`Sending Archive Clients to ${user.name}`);
+                console.log(`Sending Archived Clients to ${user.name}`);
                 //Get all the clients that are archieved
-                const archieved = getClients(3);
+                const archieved = await getClients(3);
                 //Format the data into a message
                 const archievedMessage: WSMessage = {
                     status: 'ok',
@@ -105,8 +105,8 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
                 const {rows: comment} = await pool.query(`SELECT * FROM comments WHERE date = ${date};`);
                 //Transform the name of the fields into the standard that we use
                 comment[0] = {
-                    clientId: comment[0].client_id,
-                    authorId: comment[0].author_id,
+                    client_id: comment[0].client_id,
+                    author_id: comment[0].author_id,
                     message: comment[0].message,
                     date: comment[0].date,
                 };
@@ -150,6 +150,7 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
                 socket.send(JSON.stringify(onlineMessage));
                 break;
             case EventType.CLIENT_NEXTSTAGE:
+                console.log(message);
                 //Get the id of the client
                 const {client_id, new_stage} = message.data;
                 //Update the client in the database
@@ -190,22 +191,6 @@ httpServer.on('upgrade', (req, socket, head) => {
         });
     }) 
 });
-async function sendInitialClients(ws: WebSocket, user:User) {
-    //Anounce that clients are being sent to a specificied user
-    console.log(`Sending clients to ${user.name}...`);
-    //Get the clients from the database
-    const {rows: clients} = await pool.query('SELECT * FROM clients WHERE stage = 1;');
-    //Form a message to send with the clients as the data
-    const response: WSMessage = {
-        status: 'ok',
-        event: EventType.CLIENT_STAGE1,
-        data: clients
-    }
-    //Send the data over the socket
-    ws.send(JSON.stringify(response));
-    //Announce that the clients have been sent
-    console.log(`Clients sent to ${user.name}.`);
-}
 /**
  * Gets all the clients in a specified stage
  * @param stage The stage that the client is in. 1 and 2 for Stages 1 and 2, and 3 for archive
