@@ -79,7 +79,7 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
                 //Get the client id and the name of the field being updated
                 const {id: updateId, field, value} = message.data;
                 //Update the information in the database
-                await pool.query(`UPDATE clients SET ${field} = ${value} WHERE id = ${updateId}`);
+                await pool.query('UPDATE clients SET $1 = $2 WHERE id = $3', [field, value, updateId]);
 
                 //Get the updated client
                 const {rows: client} = await pool.query(`SELECT * FROM clients WHERE id = ${updateId}`);
@@ -99,13 +99,15 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
                 //Get the time
                 const date = new Date(Date.now()).toISOString();
                 //Add to the database
-                await pool.query(`INSERT INTO comments (client_id, message, date, author_name, author_picture) VALUES (${clientId}, '${text}', '${date}', '${author_name}', '${author_picture}');`);
-                
+                const addQuery = "INSERT INTO comments (client_id, message, date, author_name, author_picture) VALUES ($1, $2, $3, $4, $5);";
+                const addValues = [clientId, text, date, author_name, author_picture];
+                await pool.query(addQuery, addValues);
                 //Now get the newly added comment
-                const {rows: comment} = await pool.query(`SELECT * FROM comments WHERE date = '${date}';`);
+                const {rows: comment} = await pool.query('SELECT * FROM comments WHERE date = $1;', [date]);
                 //Transform the name of the fields into the standard that we use
-                comment[0] = {
+                const data = {
                     client_id: comment[0].client_id,
+                    id: comment[0].id,
                     author_name: comment[0].author_name,
                     author_picture: comment[0].author_picture,
                     message: comment[0].message,
@@ -115,7 +117,7 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
                 const commentMessage: WSMessage = {
                     status: 'ok',
                     event: EventType.ADD_COMMENT,
-                    data: comment[0]
+                    data
                 }
                 //Broadcast the comment
                 broadcastMessage(commentMessage);
@@ -125,19 +127,22 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
                 //Get the comment id
                 const {id} = message.data;
                 //Get the comment's information
-                const {rows: deletedComment} = await pool.query(`SELECT * FROM comments WHERE id = ${id}`);
-                //Delete the comment from the comments table
-                await pool.query(`DELETE FROM comments WHERE id = ${id};`);
-                //Broadcast that the comment was deleted
-                const deletionMessage: WSMessage = {
-                    status: 'ok',
-                    event: EventType.DELETE_COMMENT,
-                    data: {
-                        client_id: deletedComment[0].client_id,
-                        comment_id: id
+                const {rows: deletedComment} = await pool.query('SELECT * FROM comments WHERE id = $1;', [id]);
+                //Make sure the comment still exists
+                if (deletedComment[0]) {
+                    //Delete the comment from the comments table
+                    await pool.query(`DELETE FROM comments WHERE id = ${id};`);
+                    //Broadcast that the comment was deleted
+                    const deletionMessage: WSMessage = {
+                        status: 'ok',
+                        event: EventType.DELETE_COMMENT,
+                        data: {
+                            client_id: deletedComment[0].client_id,
+                            id
+                        }
                     }
+                    broadcastMessage(deletionMessage);
                 }
-                broadcastMessage(deletionMessage);
                 break;
             case EventType.ONLINE_USERS:
                 console.log(`Sending online users to ${user.email}`);
@@ -155,7 +160,7 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
                 //Get the id of the client
                 const {client_id, new_stage} = message.data;
                 //Update the client in the database
-                await pool.query(`UPDATE clients SET stage = ${new_stage} WHERE id = ${client_id}`);
+                await pool.query(`UPDATE clients SET stage = $1 WHERE id = $2`, [new_stage, client_id]);
                 //Broadcast the same information
                 const nextStageMessage: WSMessage = {
                     status: 'ok',
@@ -167,7 +172,7 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
             case EventType.ADD_USER:
                 //Get the email address
                 const {email} = message.data;
-                await pool.query(`INSERT INTO users (email) VALUES ('${email}')`);
+                await pool.query('INSERT INTO users (email) VALUES ($1)', [email]);
                 console.log(`Added ${email} to approved accounts`);
                 break;
             default:
