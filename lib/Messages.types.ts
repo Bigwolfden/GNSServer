@@ -12,7 +12,8 @@ export enum EventType {
     DELETE_COMMENT,
     ONLINE_USERS,
     ADD_CLIENT,
-    CLIENT_NEXTSTAGE
+    CLIENT_NEXTSTAGE,
+    ADD_USER
 }
 export interface Client {
     id: number,
@@ -26,6 +27,5 @@ export interface Client {
 }
 export interface User {
     id: number,
-    name: string,
-    title: string,
+    email: string,
 }

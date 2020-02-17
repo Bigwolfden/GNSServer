@@ -14,7 +14,7 @@ const client = new OAuth2Client(process.env.CLIENT_ID);
  */
 export async function authenticateWS(request: IncomingMessage, cb: (err: string, user: User) => void) {
     //Create an empty user to use if the request gets rejected
-    const emptyUser: User = {id: 0, name: '', title: ''};
+    const emptyUser: User = {id: 0, email: ''};
     //Make sure that they have sent a token
     if (typeof request.headers.token == 'string') {
         try {
@@ -27,15 +27,18 @@ export async function authenticateWS(request: IncomingMessage, cb: (err: string,
             const payload = ticket.getPayload();
             if (!payload)
                 throw new Error();
-
             //Make sure that the user is in the databse
-            const users = await pool.query(`SELECT * FROM users WHERE gid = '${payload.sub}'`);
+            const users = await pool.query(`SELECT * FROM users WHERE email = '${payload.email}';`);
 
             //If the query found a result, great! They're an authorized user
             if (users.rows.length > 0) {
+                //Get the user
                 const user = users.rows[0];
+                //Update the profile picture if it's new
+                //if (user.profile_picture != )
                 cb('', user);
             } else {
+                console.log(`Attempted connection by ${payload.email}`);
                 //If not, no good! Reject them
                 cb('', emptyUser);
             }
