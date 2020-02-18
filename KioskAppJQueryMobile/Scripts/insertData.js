@@ -8,9 +8,11 @@ $("#btnSubmit").click(function(){
 	var zip = $("#zip").val();
 	var state = $("#select-native-1").val();
 	var current_date = new Date(Date.now()).toISOString();
+	//$.post("https://localhost:3000/add", {first_name});
+	/*
 	$.ajax({
-		url:"localhost:3000",	// Is this "url" correct?
-		method:"post",
+		url:"https://localhost:3000/add",
+		type:"POST",
 		data: {
 			first_name:first_name,
 			last_name:last_name,
@@ -28,4 +30,5 @@ $("#btnSubmit").click(function(){
 			$('#stud_insert').html(data);
 		}
 	});
+	*/
 });

@@ -1,23 +1,24 @@
 import * as express from "express";
 import {pool} from '../database';
+import path from "path";
 export const router = express.Router();
 
 
 router.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.sendFile(path.join(__dirname, '../../../KioskAppJQueryMobile/KioskApp.html'));
 });
 router.get('/clients', async (req, res) => {
     let clients = await pool.query('SELECT * FROM clients');
     res.json(clients.rows);
     console.log(clients.rows);
 });
-router.post('/test', async (req, res) => {
-    console.log("The test url has been hit with a post request!");
-
-    await pool.query("INSERT INTO clients (first_name, last_name, phone, email, street_address, city, state) VALUES ('Ryan', 'Wolf', '9375555555', 'ryan@gns.com', '123 fake street', 'Dayton', 'OH')");
+router.post('/add', async (req, res) => {
+    //Get the values from the body of the request
+    const {first_name, last_name, phone_number, email, address, city, zip, state} = req.body;
+    const values = [first_name, last_name, phone_number, email, address, city, zip, state];
+    console.log(values);
+    //Add them to the database
+    await pool.query("INSERT INTO clients (first_name, last_name, phone, email, street_address, city, zip, state, date_added, stage) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp, 1);", values);
     
-    console.log("Here's everything in the clients database: ");
-    let result = await pool.query('SELECT * FROM clients');
-    console.log(result.rows);
     res.sendStatus(200);
 });

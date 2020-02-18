@@ -10,7 +10,7 @@ export enum EventType {
     UPDATE,
     ADD_COMMENT,
     DELETE_COMMENT,
-    ONLINE_USERS,
+    USERS,
     ADD_CLIENT,
     CLIENT_NEXTSTAGE,
     ADD_USER

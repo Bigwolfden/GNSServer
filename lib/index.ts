@@ -77,17 +77,17 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
             case EventType.UPDATE:
                 console.log(`Updating changes made by ${user.email}`);
                 //Get the client id and the name of the field being updated
-                const {id: updateId, field, value} = message.data;
-                //Update the information in the database
-                await pool.query('UPDATE clients SET $1 = $2 WHERE id = $3', [field, value, updateId]);
-
+                const {client_id: updateId, changes} = message.data;
+                for (let change of changes) {
+                    await pool.query('UPDATE clients SET ' + change.key + ' = $1 WHERE id = $2;', [change.data, updateId]);
+                }
                 //Get the updated client
-                const {rows: client} = await pool.query(`SELECT * FROM clients WHERE id = ${updateId}`);
+                const {rows: client} = await pool.query(`SELECT * FROM clients WHERE id = $1;`, [updateId]);
                 //Format the client into a message
                 const clientMessage: WSMessage = {
                     status: 'ok',
                     event: EventType.UPDATE,
-                    data: client
+                    data: client[0]
                 };
                 //Broadcast the updated client
                 broadcastMessage(clientMessage);
@@ -144,13 +144,26 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
                     broadcastMessage(deletionMessage);
                 }
                 break;
-            case EventType.ONLINE_USERS:
-                console.log(`Sending online users to ${user.email}`);
-                //Format the list of online users into a message
+            case EventType.USERS:
+                console.log(`Sending users to ${user.email}`);
+                //Get all the users from the database
+                const {rows: tempUsers} = await pool.query('SELECT * FROM users;');
+                //See who's online or not
+                let allUsers = []
+                
+                for (let aUser of tempUsers) {
+                    let isOnline = false;
+                    for (let onlineUser of onlineUsers) {
+                        if (onlineUser.id == aUser.id)
+                            isOnline = true
+                    }
+                    allUsers.push({...aUser, online: isOnline});
+                }
+                //Format the list of users into a message
                 const onlineMessage: WSMessage = {
                     status: 'ok',
-                    event: EventType.ONLINE_USERS,
-                    data: onlineUsers
+                    event: EventType.USERS,
+                    data: allUsers
                 }
                 //Send the message
                 socket.send(JSON.stringify(onlineMessage));
@@ -160,7 +173,7 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
                 //Get the id of the client
                 const {client_id, new_stage} = message.data;
                 //Update the client in the database
-                await pool.query(`UPDATE clients SET stage = $1 WHERE id = $2`, [new_stage, client_id]);
+                await pool.query(`UPDATE clients SET stage = $1 WHERE id = $2;`, [new_stage, client_id]);
                 //Broadcast the same information
                 const nextStageMessage: WSMessage = {
                     status: 'ok',

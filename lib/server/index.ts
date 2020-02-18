@@ -1,12 +1,17 @@
 import https from "https";
 import express from "express";
 import { router as indexRouter} from "./routes/index";
+import bodyParser from 'body-parser';
 import fs from 'fs';
 
 const app = express();
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
 //Use the routers
 app.use('/', indexRouter);
+app.use(express.static(__dirname + "../../../KioskAppJQueryMobile"));
 
 //Get the credentials
 const credentials = {
