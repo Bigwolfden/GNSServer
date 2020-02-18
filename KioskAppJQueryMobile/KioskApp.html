@@ -112,7 +112,7 @@
 				<!-- Phone Number and Email text boxes -->
 				<div class="ui-field-contain" id="divPhoneEmail">
 					<label id="phoneEmail"></label>
-					<input type="number" name="phone_number" id="phoneNumber" pattern="[0-9]*" min="0" value="" placeholder="Phone Number" />
+					<input type="number" name="phone_number" id="phoneNumber" min="0" value="" onKeyPress="return this.value.length <= 10;" max="10" placeholder="Phone Number" />
 					<input type="text" name="email" id="email" value="" placeholder="Email" />
 				</div>
 				
@@ -213,21 +213,17 @@
 					<input type="checkbox" name="cabinets" id="cabinets">
 					<label for="cabinets">Cabinets</label>
 				</fieldset>
-				<input type="submit" href="#lastpage" data-role="button" data-inline="true" class="button" id="btnSubmit" onclick="StartTimer()">Submit</a>
+				<input type="submit" href="#lastpage" data-role="button"  class="button" id="btnSubmit" value="Submit" onclick="StartTimer()">
 				<!-- Starts timer to "reset" application -->
 				<script type="text/javascript">
 					function StartTimer() 
 					{  
+						window.location = "#lastpage";
 						setTimeout('Redirect()', 5000); 
 					}
 				</script>
 			</form>
         </div>
-		<!-- Not visually appealing
-		<div class="backgroundImg">
-			<p class="backgroundImg"></p>
-		</div>
-		-->
 	</section>
     
 	<!-- This is the last page -->
@@ -235,7 +231,7 @@
 		<header data-role="header">
 		  <img src="Images/GNS Logo.png" class="banner"/>
         </header>
-		<!-- Returns to first page after 10 seconds. This "resets" the application for the next customer -->
+		<!-- Returns to first page after 5 seconds. This "resets" the application for the next customer -->
 		<script type="text/javascript">
 			$('#lastpage').on('pageshow', function (event, ui) {
 				window.location="#firstpage";
