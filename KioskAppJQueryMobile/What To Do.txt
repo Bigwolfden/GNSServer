@@ -1,0 +1,7 @@
+What should I do for the following issues? (minor stuff)
+
+-FormValidation.js doesn't work
+
+TO DO:
+-Add variables for possible interests
+

@@ -1,0 +1,35 @@
+/*
+	This form hold all css styles that help customize the application to fit styles on GNS' website.
+	It replaces the blue halo color with red from GNS website.
+	GNS RED:
+		Hex: #8f2831
+		RGB: 143,40,49
+	GNS BLUE:
+		Hex: #3d577a
+		RGB: 61,87,122
+
+	Most styles affecting JQuery Mobile elements must have !important tag to overwrite JQuery Mobile default styles. Possible fixes in the works?
+*/
+/* Customize button colors */
+
+
+/* Customize checkbox colors */
+/* Checkbox area background */
+.ui-checkbox label.ui-checkbox-off {
+    background: white !important;
+}
+/* Checkbox Labels */
+fieldset label {
+	width: 185px;
+	height: 40px;
+	text-align: center !important;
+	font-size: 15px !important;
+	font-weight: bold;
+}
+/* Checkbox CHECK */
+.ui-checkbox-off:after {
+    background-color: white !important;
+}
+.ui-checkbox-on:after {
+    background-color: #8f2831 !important;
+}

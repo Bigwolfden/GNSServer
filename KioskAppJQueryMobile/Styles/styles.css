@@ -1,0 +1,104 @@
+/* Main Styles */
+header {
+	background-color: #f9f9f9 !important;
+	border: none !important;
+}
+.banner {
+	width: 90%;
+	margin: 0% auto;
+	display: block;
+	border: 0;
+	border-color: rgb(233,233,233);
+}
+#grayPane h1 {
+	text-align: center;
+	font-family: "Aguafina Script";
+	color: #3d577a;
+	font-size: 70px;
+	border-color: rgb(233,233,233);
+}
+hr {
+	border-color: #dddddd;
+}
+#aboutGNS {
+	font-family: Book Antiqua;
+}
+#aboutGNS, #about, #exitMsg {
+	text-align: center;
+}
+
+/* Name Section */
+#name {
+	width: 6%;
+}
+#fullName {
+	width: 100%;
+	margin: 0% auto;
+}
+#fullName .ui-input-text {
+	width: 46%;
+	margin: 0% auto;
+}
+/* Phone Number */
+#lblPhoneNumber {
+	width: 50%;
+	padding: 0;
+	margin: 0;
+	text-align: left;
+}
+#lblEmail {
+	width: 50%;
+	padding: 0;
+	margin: 0;
+	text-align: right;
+}
+#phoneEmail {
+	width: 0;
+	padding: 0;
+	margin: 0;
+}
+#divPhoneEmail .ui-input-text {
+	width: 50%;
+	margin: 0 auto;
+}
+/* Address Section */
+#lblStreetAddress {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	text-align: left;
+}
+#streetCityZip {
+	width: 0;
+	padding: 0;
+	margin: 0;
+}
+#divStreetCityZip .ui-input-text {
+	width: 33%;
+	margin: 0 auto;
+}
+/* State Dropdown */
+#stateLabel {
+	margin: 0;
+}
+/* Possible Interests Checkboxes */
+/* Hides the "check" part of the checkbox behind the label with text by making it smaller */
+input[type=checkbox] {
+	transform: scale(.1);
+}
+.ui-field-contain .ui-corner-tl {
+	border-radius: 5 !important;
+}
+.ui-corner-tr {
+	border-radius: 5 !important;
+}
+/* Submit Button */
+.button {
+	width: 90%;
+	margin: 0% auto;
+	display: block;
+}
+/* Form Validation */
+.error {
+	color: red;
+}

@@ -1,0 +1,30 @@
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+	width: 80%;
+	margin: auto;
+}
+	
+a .left carousel-control,
+a .right carousel-control {
+	visibility: hidden;
+	background-color: white;
+}
+
+.glyphicon {
+	visibility: hidden;
+}
+
+.container {
+	padding: 0;
+	width: 100%;
+	min-height: 300px;
+	max-height: 300px;
+	overflow: hidden;
+}
+
+.item {
+	padding: 0;
+	min-height: 300px;
+	max-height: 300px;
+	position: relative;
+}

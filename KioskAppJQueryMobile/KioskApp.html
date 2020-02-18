@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>General Information</title>
+	<meta name="viewport" content="width=device-width"/>
+    <!-- the three things that jQuery Mobile needs to work -->
+    <link rel="stylesheet" href="jquery.mobile-1.4.2/jquery.mobile-1.4.2.css" />	
+    <script src="jquery-1.11.0.js" type="text/javascript"></script>
+	<script src="jquery.mobile-1.4.2/jquery.mobile-1.4.2.js" type="text/javascript"></script>
+	<!-- Global Natural Stones Styles -->
+	<link rel='stylesheet' id='redux-google-fonts-wpc_options-css'  href='http://fonts.googleapis.com/css?family=Open+Sans%3A300%2C400%2C600%2C700%2C800%2C300italic%2C400italic%2C600italic%2C700italic%2C800italic%7CLato%3A100%2C300%2C400%2C700%2C900%2C100italic%2C300italic%2C400italic%2C700italic%2C900italic%7CAguafina+Script%3A400&#038;ver=5.3.2' type='text/css' media='all' />
+	<!-- Carousel Stylesheets -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="Styles/CarouselStyles.css" />
+	<!-- My stylesheets -->
+	<link rel="stylesheet" href="Styles/styles.css" />
+	<link rel="stylesheet" href="Styles/CustomizableStuff.css" />
+	<!-- My scripts -->
+	<script src="Scripts/Carousel.js"></script>
+	<script src="Scripts/FormValidation.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	
+		
+</head>
+<body>
+    <!-- This is the first page -->
+	<section id="firstpage" data-role="page">
+		<div>
+        <header data-role="header">
+		  <img src="Images/GNS Logo.png" class="banner"/>
+        </header>
+		<!-- Bootstrap Banner goes here! -->
+		<div class="container">
+			<div id="myCarousel" class="carousel slide">
+				<!-- Indicators -->
+				<ol class="carousel-indicators">
+					<li class="item1 active"></li>
+					<li class="item2"></li>
+					<li class="item3"></li>
+					<li class="item4"></li>
+					<li class="item5"></li>
+					<li class="item6"></li>
+					<li class="item7"></li>
+					<li class="item8"></li>
+				</ol>
+				<!-- Wrapper for slides -->
+				<div class="carousel-inner" role="listbox">
+					<div class="item active">
+						<img src="Images/Carousel1.jpg" alt="Carousel Image 1">
+					</div>
+					<div class="item">
+						<img src="Images/Carousel2.jpg" alt="Carousel Image 2" width="100%" height="100%">
+					</div>
+					<div class="item">
+						<img src="Images/Carousel3.jpg" alt="Carousel Image 3" width="460" height="345">
+					</div>
+					<div class="item">
+						<img src="Images/Carousel4.jpg" alt="Carousel Image 4" width="460" height="345">
+					</div>					
+					<div class="item">
+						<img src="Images/Carousel5.jpg" alt="Carousel Image 5" width="460" height="345">
+					</div>
+					<div class="item">
+						<img src="Images/Carousel6.jpg" alt="Carousel Image 6" width="460" height="345">
+					</div>
+					<div class="item">
+						<img src="Images/Carousel7.jpg" alt="Carousel Image 7" width="460" height="345">
+					</div>
+					<div class="item">
+						<img src="Images/Carousel8.jpg" alt="Carousel Image 8" width="460" height="345">
+					</div>					
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div id="grayPane">
+			<h1>Welcome to Global Natural Stones!</h1>
+		</div>
+		<hr>
+        <div class="ui-content">
+			<h2 id="aboutGNS">About GNS</h2>
+			<p id="about">From the beginning of time, stone has made possible some of man’s greatest architectural accomplishments. Global Natural Stones built its business with a strong foundation, and just like mankinds great stone structures, we have endured the test of time. Ever since it was founded, Global Natural Stones has met the demands of a changing market, a variety of cultures, and has adjusted to meet the needs of your present and future important projects.</p>
+			<a href="#mainpage" data-role="button" data-inline="true" class="button">Begin</a>
+        </div>
+    </section>
+	
+	<!-- This is the main page -->
+	<section id="mainpage" data-role="page">
+		<header data-role="header">
+		  <img src="Images/GNS Logo.png" class="banner"/>
+        </header>		
+		<div id="grayPane">
+			<h1>Please fill out some general information!</h1>
+		</div>
+		<div class="ui-content">
+			<form id="form1" method="get" action="">
+				<!-- Full Name text boxes -->
+				<div class="ui-field-contain" id="fullName">
+					<label id="name">Name:</label>
+					<input type="text" name="firstName" id="firstName" value="" placeholder="First Name" />
+					 <!-- <input type="text" name="middleName" id="middleName" value="" placeholder="Middle Name" /> Maybe don't need this? -->
+					<input type="text" name="lastName" id="lastName" value="" placeholder="Last Name" />
+				</div>
+				
+				<!-- Phone Number and Email labels -->
+				<div class="ui-field-contain" id="lblPhoneEmail">
+					<label for="phoneNumber" id="lblPhoneNumber">Phone Number:</label>
+					<label for="email" id="lblEmail">Email:</label>
+				</div>
+				
+				<!-- Phone Number and Email text boxes -->
+				<div class="ui-field-contain" id="divPhoneEmail">
+					<label id="phoneEmail"></label>
+					<input type="number" name="phoneNumber" id="phoneNumber" pattern="[0-9]*" min="0" value="" placeholder="Phone Number" />
+					<input type="text" name="email" id="email" value="" placeholder="Email" />
+				</div>
+				
+				<!-- Street Address and City labels -->
+				<div class="ui-field-contain" id="lblStreetCityZip">
+					<label for="address" id="lblStreetAddress">Street Address:</label>
+				</div>
+				
+				<!-- Street Address and City text boxes -->
+				<div class="ui-field-contain" id="divStreetCityZip">
+					<label id="streetCityZip"></label>
+					<input type="text" name="address" id="address" value="" placeholder="Address" />
+					<input type="text" name="city" id="city" value="" placeholder="City" />
+					<input type="text" name="zip" id="zip" value="" placeholder="Zip" />
+				</div>
+				
+				<!-- State Select Dropdown Menu -->
+				<label for="select-native-1" id="stateLabel">Select a State:</label>
+				<select name="select-native-1" id="select-native-1" data-native-menu="false">
+				<option value="" disabled="disabled">Select a State</option>
+					<option value="AL">Alabama</option>
+					<option value="AK">Alaska</option>
+					<option value="AZ">Arizona</option>
+					<option value="AR">Arkansas</option>
+					<option value="CA">California</option>
+					<option value="CO">Colorado</option>
+					<option value="CT">Connecticut</option>
+					<option value="DE">Delaware</option>
+					<option value="DC">District Of Columbia</option>
+					<option value="FL">Florida</option>
+					<option value="GA">Georgia</option>
+					<option value="HI">Hawaii</option>
+					<option value="ID">Idaho</option>
+					<option value="IL">Illinois</option>
+					<option value="IN">Indiana</option>
+					<option value="IA">Iowa</option>
+					<option value="KS">Kansas</option>
+					<option value="KY">Kentucky</option>
+					<option value="LA">Louisiana</option>
+					<option value="ME">Maine</option>
+					<option value="MD">Maryland</option>
+					<option value="MA">Massachusetts</option>
+					<option value="MI">Michigan</option>
+					<option value="MN">Minnesota</option>
+					<option value="MS">Mississippi</option>
+					<option value="MO">Missouri</option>
+					<option value="MT">Montana</option>
+					<option value="NE">Nebraska</option>
+					<option value="NV">Nevada</option>
+					<option value="NH">New Hampshire</option>
+					<option value="NJ">New Jersey</option>
+					<option value="NM">New Mexico</option>
+					<option value="NY">New York</option>
+					<option value="NC">North Carolina</option>
+					<option value="ND">North Dakota</option>
+					<option value="OH" selected="selected">Ohio</option>
+					<option value="OK">Oklahoma</option>
+					<option value="OR">Oregon</option>
+					<option value="PA">Pennsylvania</option>
+					<option value="RI">Rhode Island</option>
+					<option value="SC">South Carolina</option>
+					<option value="SD">South Dakota</option>
+					<option value="TN">Tennessee</option>
+					<option value="TX">Texas</option>
+					<option value="UT">Utah</option>
+					<option value="VT">Vermont</option>
+					<option value="VA">Virginia</option>
+					<option value="WA">Washington</option>
+					<option value="WV">West Virginia</option>
+					<option value="WI">Wisconsin</option>
+					<option value="WY">Wyoming</option>
+					</select>		
+				
+				<!-- Possible Interests Checkbox list -->
+				<fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+					<legend>Possible Interests:</legend>
+					<input type="checkbox" name="flooring" id="flooring">
+					<label for="flooring">Flooring</label>
+					
+					<input type="checkbox" name="appliances" id="appliances">
+					<label for="appliances">Appliances</label>
+					
+					<input type="checkbox" name="countertops" id="countertops">
+					<label for="countertops">Countertops</label>
+					
+					<input type="checkbox" name="wallTiles" id="wallTiles">
+					<label for="wallTiles">Wall Tiles</label>
+					
+					<input type="checkbox" name="landscape" id="landscape">
+					<label for="landscape">Landscape</label>
+					
+					<input type="checkbox" name="edgesAndMolding" id="edgesAndMolding">
+					<label for="edgesAndMolding">Edges & Molding</label>
+					
+					<input type="checkbox" name="sinksAndFaucets" id="sinksAndFaucets">
+					<label for="sinksAndFaucets">Sinks & Faucets</label>
+					
+					<input type="checkbox" name="cabinets" id="cabinets">
+					<label for="cabinets">Cabinets</label>
+				</fieldset>
+				<a href="#lastpage" data-role="button" data-inline="true" class="button" id="btnSubmit" onclick="StartTimer()">Submit</a>
+				<!-- Starts timer to "reset" application -->
+				<script type="text/javascript">
+					function StartTimer() 
+					{  
+						setTimeout('Redirect()', 5000); 
+					}
+				</script>
+			</form>
+        </div>
+		<!-- Not visually appealing
+		<div class="backgroundImg">
+			<p class="backgroundImg"></p>
+		</div>
+		-->
+	</section>
+    
+	<!-- This is the last page -->
+	<section id="lastpage" data-role="page">
+		<header data-role="header">
+		  <img src="Images/GNS Logo.png" class="banner"/>
+        </header>
+		<!-- Returns to first page after 10 seconds. This "resets" the application for the next customer -->
+		<script type="text/javascript">
+			$('#lastpage').on('pageshow', function (event, ui) {
+				window.location="#firstpage";
+			});
+			function Redirect() 
+			{  
+				window.location="#firstpage"; 
+			}
+		</script>
+		
+		<div id="grayPane">
+			<h1>Thank You!</h1>
+		</div>
+        <div class="ui-content">
+			<p id="exitMsg">A representative will be with you shortly!</p>
+        </div>
+    </section>	
+</body>
+</html>
