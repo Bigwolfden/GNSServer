@@ -1,58 +1,47 @@
 /* Validates the form */
-/* Reference: http://jsfiddle.net/Gajotres/RLJHK/ */
-$("#btnSubmit").click(function(){
-	$('#form1').validate({
-		rules: {
-			firstName: {
-				required: true
-			},
-			lastName: {
-				required: true
-			},
-			phoneNumber: {
-				required: true
-			},
-			email: {
-				required: true
-			},
-			address: {
-				required: true
-			},
-			city: {
-				required: true
-			},
-			zip: {
-				required: true
-			}	
-		},
-		messages: {
-			firstName: {
-				required: "Please enter your first name."
-			},
-			lastName: {
-				required: "Please enter your last name."
-			},
-			email: {
-				required: "Please enter your email."
-			},
-			address: {
-				required: "Please enter your address."
-			},
-			city: {
-				required: "Please enter your city."
-			},
-			zip: {
-				required: "Please enter your zip."
-			}
-		},
-		errorPlacement: function (error, element) {
-			error.appendTo(element.parent().prev());
-		},
-		submitHandler: function (form) {
-			$(':mobile-pagecontainer').pagecontainer('change', '#success', {
-				reload: false
-			});
-        return false;
-    }
-	});
-});
+function validateForm() {
+	var fName = document.forms["form1"]["firstName"].value;
+	var lName = document.forms["form1"]["lastName"].value;
+	var pNumber = document.forms["form1"]["phoneNumber"].value;
+	var email = document.forms["form1"]["email"].value;
+	var address = document.forms["form1"]["address"].value;
+	var city = document.forms["form1"]["city"].value;
+	var zip = document.forms["form1"]["zip"].value;
+  
+	if (fName == "") {
+		alert("First name must be filled out.");
+		return false;
+	}
+	if (lName == "") {
+		alert("Last name must be filled out.");
+		return false;
+	}
+	if (pNumber == "") {
+		alert("Phone Number must be filled out.");
+		return false;
+	}
+	if (email == "") {
+		alert("Email must be filled out.");
+		return false;
+	}
+	if (address == "") {
+		alert("Address must be filled out.");
+		return false;
+	}
+	if (city == "") {
+		alert("City must be filled out.");
+		return false;
+	}
+	if (zip == "") {
+		alert("Zip must be filled out.");
+		return false;
+	}
+}
+
+
+
+
+
+
+
+

@@ -25,8 +25,6 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
 
     //Add them to the list of online users
     onlineUsers.push(user);
-    //Send them the clients
-    //sendInitialClients(socket, user);
 
     socket.on('message', async (rawMessage) => {
         //Parse the message from json

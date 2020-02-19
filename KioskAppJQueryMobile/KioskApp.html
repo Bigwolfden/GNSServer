@@ -98,9 +98,9 @@
 				<!-- Full Name text boxes -->
 				<div class="ui-field-contain" id="fullName">
 					<label id="name">Name:</label>
-					<input type="text" name="first_name" id="firstName" value="" placeholder="First Name" />
+					<input type="text" name="first_name" id="firstName" value="" placeholder="First Name" maxlength="50"/>
 					 <!-- <input type="text" name="middleName" id="middleName" value="" placeholder="Middle Name" /> Maybe don't need this? -->
-					<input type="text" name="last_name" id="lastName" value="" placeholder="Last Name" />
+					<input type="text" name="last_name" id="lastName" value="" placeholder="Last Name" maxlength="50" />
 				</div>
 				
 				<!-- Phone Number and Email labels -->
@@ -113,7 +113,7 @@
 				<div class="ui-field-contain" id="divPhoneEmail">
 					<label id="phoneEmail"></label>
 					<input type="number" name="phone_number" id="phoneNumber" min="0" value="" onKeyPress="return this.value.length <= 10;" max="10" placeholder="Phone Number" />
-					<input type="text" name="email" id="email" value="" placeholder="Email" />
+					<input type="text" name="email" id="email" value="" placeholder="Email" maxlength="255"/>
 				</div>
 				
 				<!-- Street Address and City labels -->
@@ -124,9 +124,9 @@
 				<!-- Street Address and City text boxes -->
 				<div class="ui-field-contain" id="divStreetCityZip">
 					<label id="streetCityZip"></label>
-					<input type="text" name="address" id="address" value="" placeholder="Address" />
-					<input type="text" name="city" id="city" value="" placeholder="City" />
-					<input type="text" name="zip" id="zip" value="" placeholder="Zip" />
+					<input type="text" name="address" id="address" value="" placeholder="Address" maxlength="255"/>
+					<input type="text" name="city" id="city" value="" placeholder="City" maxlength="50" />
+					<input type="number" name="zip" id="zip" value="" placeholder="Zip" onKeyPress="return this.value.length <= 9;"/>
 				</div>
 				
 				<!-- State Select Dropdown Menu -->
