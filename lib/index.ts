@@ -23,8 +23,9 @@ const wsServer = new WebSocket.Server({
 });
 wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: User) => {
 
-    //Add them to the list of online users
-    onlineUsers.push(user);
+    //Add them to the list of online users (if it is a user)
+    if (user.email != '')
+        onlineUsers.push(user);
 
     socket.on('message', async (rawMessage) => {
         //Parse the message from json

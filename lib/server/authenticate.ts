@@ -4,6 +4,7 @@ import { User } from "../Messages.types";
 import {config} from "dotenv";
 import { OAuth2Client } from "google-auth-library";
 import { pool } from "./database";
+//Register the variables from the .env file
 config();
 //Create an Oauth client with the correct client id for the application
 const client = new OAuth2Client(process.env.CLIENT_ID);

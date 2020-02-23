@@ -26,6 +26,5 @@ router.post('/add', async (req, res) => {
     console.log(values);
     //Add them to the database
     await pool.query("INSERT INTO clients (first_name, last_name, phone, email, street_address, city, zip, state, date_added, stage) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp, 1);", values);
-    //res.redirect("https://localhost:3000/#lastpage");
     res.sendStatus(200);
 });
