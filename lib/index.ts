@@ -143,6 +143,26 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
                     broadcastMessage(deletionMessage);
                 }
                 break;
+            case EventType.ADD_CLIENT:
+                console.log(message.data);
+                const {first_name, last_name, phone, email: client_email, street_address: address, city, zip, state} = message.data;
+                const values = [first_name, last_name, phone.substring(0,10), client_email, address, city, zip, state];
+                //Don't add to the database if any value is blank
+                for (let value of values) {
+                    if (!value || value == "") return;
+                }
+                //Add them to the database
+                await pool.query("INSERT INTO clients (first_name, last_name, phone, email, street_address, city, zip, state, date_added, stage) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp, 1);", values);
+                //Get the full client
+                const {rows: addedClient} = await pool.query('SELECT * FROM clients WHERE first_name = $1 AND last_name = $2 AND phone = $3;',[first_name, last_name, phone.substring(0,10)]);
+                //Send the client
+                const addClientMessage: WSMessage = {
+                    status: 'ok',
+                    event: EventType.ADD_CLIENT,
+                    data: addedClient[0]
+                };
+                broadcastMessage(addClientMessage);
+                break;
             case EventType.USERS:
                 console.log(`Sending users to ${user.email}`);
                 //Get all the users from the database
