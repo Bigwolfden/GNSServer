@@ -18,7 +18,6 @@
 	<link rel="stylesheet" href="/Styles/CustomizableStuff.css" />
 	<!-- My scripts -->
 	<script src="/Scripts/Carousel.js"></script>
-	<script src="/Scripts/FormValidation.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 	
@@ -95,13 +94,13 @@
 			<h1>Please fill out some general information!</h1>
 		</div>
 		<div class="ui-content">
-			<form id="form1" method="POST" action="/add">
+			<form name="form1" id="form1" method="POST" action="/add" onsubmit="return StartTimer()">
 				<!-- Full Name text boxes -->
 				<div class="ui-field-contain" id="fullName">
 					<label id="name">Name:</label>
-					<input type="text" name="first_name" id="firstName" value="" placeholder="First Name" maxlength="50"/>
+					<input type="text" name="first_name" id="firstName" value="" placeholder="First Name" maxlength="50" required/>
 					 <!-- <input type="text" name="middleName" id="middleName" value="" placeholder="Middle Name" /> Maybe don't need this? -->
-					<input type="text" name="last_name" id="lastName" value="" placeholder="Last Name" maxlength="50" />
+					<input type="text" name="last_name" id="lastName" value="" placeholder="Last Name" maxlength="50" required/>
 				</div>
 				
 				<!-- Phone Number and Email labels -->
@@ -113,8 +112,8 @@
 				<!-- Phone Number and Email text boxes -->
 				<div class="ui-field-contain" id="divPhoneEmail">
 					<label id="phoneEmail"></label>
-					<input type="number" name="phone_number" id="phoneNumber" min="0" value="" onKeyPress="return this.value.length <= 10;" max="10" placeholder="Phone Number" />
-					<input type="text" name="email" id="email" value="" placeholder="Email" maxlength="255"/>
+					<input required type="number" name="phone_number" id="phoneNumber" min="0" value="" onKeyPress="return this.value.length < 10;" max="9999999999" placeholder="Phone Number" />
+					<input required type="text" name="email" id="email" value="" placeholder="Email" maxlength="255"/>
 				</div>
 				
 				<!-- Street Address and City labels -->
@@ -125,14 +124,14 @@
 				<!-- Street Address and City text boxes -->
 				<div class="ui-field-contain" id="divStreetCityZip">
 					<label id="streetCityZip"></label>
-					<input type="text" name="address" id="address" value="" placeholder="Address" maxlength="255"/>
-					<input type="text" name="city" id="city" value="" placeholder="City" maxlength="50" />
-					<input type="number" name="zip" id="zip" value="" placeholder="Zip" onKeyPress="return this.value.length <= 9;"/>
+					<input required type="text" name="address" id="address" value="" placeholder="Address" maxlength="255"/>
+					<input required type="text" name="city" id="city" value="" placeholder="City" maxlength="50" />
+					<input required type="number" name="zip" id="zip" value="" placeholder="Zip" onKeyPress="return this.value.length <= 9;"/>
 				</div>
 				
 				<!-- State Select Dropdown Menu -->
-				<label for="select-native-1" id="stateLabel">Select a State:</label>
-				<select name="state" id="select-native-1" data-native-menu="false">
+				<label required for="select-native-1" id="stateLabel">Select a State:</label>
+				<select required name="state" id="select-native-1" data-native-menu="false">
 				<option value="" disabled="disabled">Select a State</option>
 					<option value="AL">Alabama</option>
 					<option value="AK">Alaska</option>
@@ -214,7 +213,7 @@
 					<input type="checkbox" name="cabinets" id="cabinets">
 					<label for="cabinets">Cabinets</label>
 				</fieldset>
-				<input type="submit" href="#lastpage" data-role="button"  class="button" id="btnSubmit" value="Submit" onclick="StartTimer()">
+				<input type="submit" href="#lastpage" data-role="button" class="button" id="btnSubmit" value="Submit">
 				<!-- Starts timer to "reset" application -->
 				<script type="text/javascript">
 					function StartTimer() 
