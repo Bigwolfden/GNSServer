@@ -13,7 +13,8 @@ export enum EventType {
     USERS,
     ADD_CLIENT,
     CLIENT_NEXTSTAGE,
-    ADD_USER
+    ADD_USER,
+    REMOVE_USER
 }
 export interface Client {
     id: number,

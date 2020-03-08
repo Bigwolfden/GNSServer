@@ -206,6 +206,27 @@ wsServer.on('connection', (socket: WebSocket, request: IncomingMessage, user: Us
                 const {email} = message.data;
                 await pool.query('INSERT INTO users (email) VALUES ($1)', [email]);
                 console.log(`Added ${email} to approved accounts`);
+                const {rows: newUser} = await pool.query('SELECT * FROM users WHERE email = $1;', [email]);
+                const userMessage: WSMessage = {
+                    status: 'ok',
+                    event: EventType.ADD_USER,
+                    data: newUser[0]
+                };
+                broadcastMessage(userMessage);
+                break;
+            case EventType.REMOVE_USER:
+                //Get the user's id
+                const userId = message.data;
+                //Delete the user
+                await pool.query('DELETE FROM users WHERE id = $1', [userId]);
+                //Send out the delete message
+                const removeMessage:WSMessage = {
+                    status: 'ok',
+                    event: EventType.REMOVE_USER,
+                    data: userId
+                };
+                console.log("Removed user with id of " + userId);
+                broadcastMessage(removeMessage);
                 break;
             default:
                 console.log('Unknown message event');

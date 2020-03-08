@@ -5,7 +5,9 @@ node_modules/
 #Package errors
 *.log
 #Build directory
+dist
 dist/
+dist\
 #HTTPS
 server.key
 server.crt
