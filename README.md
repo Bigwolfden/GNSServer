@@ -1,4 +1,6 @@
-# TechPrepServer
+# Global Natural Stones Server
+## Overview
+This repository contains the server I created in a partnership with the company Global Natural Stones, along with the kiosk application my teammate, Jeremey Oosterbaan, created.
 ## Dependencies
 * [Node.js](https://nodejs.org/en/)
 * [Yarn Package Manager](https://yarnpkg.com/en/)
